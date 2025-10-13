@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 
-export default function SchedulesCreate() {
+export default function SchedulesCreate({ users }: { users: any[] }) {
     return (
         <AppLayout>
             <Head title="Create Schedule" />
@@ -10,8 +10,9 @@ export default function SchedulesCreate() {
                 <form method="post" action={route('schedules.store')}>
                     <div className="grid gap-2">
                         <select name="user_id" className="input">
-                            {/* TODO: replace with users list */}
-                            <option value="1">Employee 1</option>
+                            {users.map((u: any) => (
+                                <option key={u.id} value={u.id}>{u.name}</option>
+                            ))}
                         </select>
                         <input name="shift_name" placeholder="Shift name" className="input" />
                         <input name="start_time" type="time" className="input" />

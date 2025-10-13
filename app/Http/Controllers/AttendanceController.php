@@ -29,7 +29,11 @@ class AttendanceController extends Controller
         // Gateperson / Admin create attendance entries
         $this->authorize('create', Attendance::class);
 
-        return Inertia::render('attendances/Create');
+        $users = \App\Models\User::where('role', 'employee')->orderBy('name')->get();
+
+        return Inertia::render('attendances/Create', [
+            'users' => $users,
+        ]);
     }
 
     public function store(Request $request)

@@ -28,7 +28,11 @@ class ScheduleController extends Controller
     {
         $this->authorize('create', Schedule::class);
 
-        return Inertia::render('schedules/Create');
+        $users = \App\Models\User::where('role', 'employee')->orderBy('name')->get();
+
+        return Inertia::render('schedules/Create', [
+            'users' => $users,
+        ]);
     }
 
     public function store(Request $request)
@@ -60,8 +64,11 @@ class ScheduleController extends Controller
     {
         $this->authorize('update', $schedule);
 
+        $users = \App\Models\User::where('role', 'employee')->orderBy('name')->get();
+
         return Inertia::render('schedules/Edit', [
             'schedule' => $schedule,
+            'users' => $users,
         ]);
     }
 

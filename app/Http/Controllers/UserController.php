@@ -42,7 +42,8 @@ class UserController extends Controller
             'role' => 'required|string|in:admin,hr,gateperson,employee',
         ]);
 
-        $user = User::create($data);
+    $data['password'] = bcrypt($data['password']);
+    $user = User::create($data);
 
         return redirect()->route('users.index');
     }
@@ -67,7 +68,7 @@ class UserController extends Controller
         ]);
 
         if ($request->filled('password')) {
-            $data['password'] = $request->input('password');
+            $data['password'] = bcrypt($request->input('password'));
         }
 
         $user->update($data);

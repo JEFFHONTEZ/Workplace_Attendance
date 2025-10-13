@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 
-export default function AttendancesCreate() {
+export default function AttendancesCreate({ users }: { users: any[] }) {
     return (
         <AppLayout>
             <Head title="Create Attendance" />
@@ -10,8 +10,9 @@ export default function AttendancesCreate() {
                 <form method="post" action={route('attendances.store')}>
                     <div className="grid gap-2">
                         <select name="user_id" className="input">
-                            {/* TODO: populate users list */}
-                            <option value="1">Employee 1</option>
+                            {users.map((u: any) => (
+                                <option key={u.id} value={u.id}>{u.name}</option>
+                            ))}
                         </select>
                         <label>Check-in</label>
                         <input name="check_in_time" type="datetime-local" className="input" />

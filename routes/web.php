@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', App\Http\Controllers\UserController::class)->except(['show']);
     Route::resource('schedules', App\Http\Controllers\ScheduleController::class);
     Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->except(['edit']);
+    Route::get('reports', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 });
 
 require __DIR__.'/settings.php';
