@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -47,5 +48,33 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Determine if user has a given role.
+     */
+    public function hasRole(string $role): bool
+    {
+        return isset($this->role) && $this->role === $role;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    public function isHR(): bool
+    {
+        return $this->hasRole('hr');
+    }
+
+    public function isGateperson(): bool
+    {
+        return $this->hasRole('gateperson');
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->hasRole('employee');
     }
 }

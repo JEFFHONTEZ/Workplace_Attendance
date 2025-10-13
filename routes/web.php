@@ -11,6 +11,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    // Resource routes for the attendance system
+    Route::resource('users', App\Http\Controllers\UserController::class)->except(['show']);
+    Route::resource('schedules', App\Http\Controllers\ScheduleController::class);
+    Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->except(['edit']);
 });
 
 require __DIR__.'/settings.php';
