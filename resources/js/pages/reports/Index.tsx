@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
@@ -17,7 +17,6 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 export default function ReportsIndex(props: any) {
     const { totalUsers, totalEmployees, attendanceToday, schedulesCount, chart, start_date, end_date } = props;
-    const { visit } = usePage();
 
     const [start, setStart] = useState(start_date || '');
     const [end, setEnd] = useState(end_date || '');
@@ -40,7 +39,8 @@ export default function ReportsIndex(props: any) {
         if (start) params.start_date = start;
         if (end) params.end_date = end;
         // Use Inertia visit to reload with query params
-        visit('/reports', { method: 'get', data: params });
+    const query = new URLSearchParams(params).toString();
+    window.location.href = '/reports' + (query ? `?${query}` : '');
     }
 
     return (

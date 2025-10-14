@@ -8,9 +8,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/search-employee', [App\Http\Controllers\DashboardController::class, 'searchEmployee'])->name('dashboard.search');
+    Route::post('dashboard/toggle-signin', [App\Http\Controllers\DashboardController::class, 'toggleSignin'])->name('dashboard.toggle_signin');
 
     // Resource routes for the attendance system
     Route::resource('users', App\Http\Controllers\UserController::class)->except(['show']);
