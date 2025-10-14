@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export default function UsersEdit({ user }: { user: any }) {
-    const form = useForm({ name: user.name, email: user.email, password: '', role: user.role });
+    const form: any = useForm<Record<string, any>>({ name: user.name, email: user.email, password: '', role: user.role });
 
     function submit(e: any) {
         e.preventDefault();
@@ -25,11 +25,11 @@ export default function UsersEdit({ user }: { user: any }) {
                         <form onSubmit={submit} className="grid gap-3">
                             <Label>Name</Label>
                             <Input value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
-                            {(form.errors as any).name && <div className="text-destructive text-sm">{(form.errors as any).name}</div>}
+                            {form.errors.name && <div className="text-destructive text-sm">{form.errors.name}</div>}
 
                             <Label>Email</Label>
                             <Input value={form.data.email} onChange={(e) => form.setData('email', e.target.value)} />
-                            {(form.errors as any).email && <div className="text-destructive text-sm">{(form.errors as any).email}</div>}
+                            {form.errors.email && <div className="text-destructive text-sm">{form.errors.email}</div>}
 
                             <Label>Password</Label>
                             <Input type="password" value={form.data.password} onChange={(e) => form.setData('password', e.target.value)} />
