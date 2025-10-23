@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
 
         // create additional random employees to reach a target count (5 employees total)
         $existingEmployees = User::where('role', 'employee')->count();
-        $target = 5;
+        $target = 2;
         if ($existingEmployees < $target) {
             User::factory()->count($target - $existingEmployees)->create();
         }
