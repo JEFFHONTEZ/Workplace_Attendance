@@ -31,13 +31,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // Grant super-admin ability: if a user is admin, allow all actions.
-        Gate::before(function (User $user, $ability) {
-            if ($user->isAdmin()) {
-                return true;
-            }
-        });
-
         // Additional gates if needed
         Gate::define('view-reports', function (User $user) {
             return $user->isAdmin() || $user->isHR();

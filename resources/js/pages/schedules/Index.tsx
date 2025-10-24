@@ -1,6 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, usePage } from '@inertiajs/react';
-import KebabMenu from '@/components/kebab-menu';
+import { Head, Link } from '@inertiajs/react';
 
 export default function SchedulesIndex({ schedules }: { schedules: any }) {
     return (
@@ -25,29 +24,17 @@ export default function SchedulesIndex({ schedules }: { schedules: any }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {schedules.data.map((s: any) => {
-                                const { user: authUser } = usePage().props as any;
-                                const isAdmin = authUser?.role === 'admin';
-
-                                return (
-                                    <tr key={s.id} className="border-t">
-                                        <td className="p-2">{s.shift_name}</td>
+                            {schedules.data.map((s: any) => (
+                                <tr key={s.id} className="border-t">
+                                    <td className="p-2">{s.shift_name}</td>
                                         <td className="p-2">{s.role?.label ?? s.role?.name}</td>
-                                        <td className="p-2">{s.start_time}</td>
-                                        <td className="p-2">{s.end_time}</td>
-                                        <td className="p-2 text-center">
-                                            <KebabMenu
-                                                viewUrl={route('schedules.show', s.id)}
-                                                editUrl={route('schedules.edit', s.id)}
-                                                deleteUrl={route('schedules.destroy', s.id)}
-                                                showView={true}
-                                                showEdit={isAdmin}
-                                                showDelete={isAdmin}
-                                            />
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                                    <td className="p-2">{s.start_time}</td>
+                                    <td className="p-2">{s.end_time}</td>
+                                    <td className="p-2 text-center">
+                                        <Link href={route('schedules.edit', s.id)} className="text-blue-600">Edit</Link>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
