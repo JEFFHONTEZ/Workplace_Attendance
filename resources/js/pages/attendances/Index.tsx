@@ -1,5 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import KebabMenu from '@/components/kebab-menu';
 
 export default function AttendancesIndex({ attendances }: { attendances: any }) {
     return (
@@ -21,16 +22,28 @@ export default function AttendancesIndex({ attendances }: { attendances: any }) 
                             </tr>
                         </thead>
                         <tbody>
-                            {attendances.data.map((a: any) => (
-                                <tr key={a.id} className="border-t">
-                                    <td className="p-2">{a.user?.name}</td>
-                                    <td className="p-2">{a.check_in_time}</td>
-                                    <td className="p-2">{a.check_out_time}</td>
-                                    <td className="p-2 text-center">
-                                        <Link href={route('attendances.show', a.id)} className="text-blue-600">View</Link>
-                                    </td>
-                                </tr>
-                            ))}
+                            {attendances.data.map((a: any) => {
+                                const { user: authUser } = usePage().props as any;
+                                const isAdmin = authUser?.role === 'admin';
+
+                                return (
+                                    <tr key={a.id} className="border-t">
+                                        <td className="p-2">{a.user?.name}</td>
+                                        <td className="p-2">{a.check_in_time}</td>
+                                        <td className="p-2">{a.check_out_time}</td>
+                                        <td className="p-2 text-center">
+                                            <KebabMenu
+                                                viewUrl={route('attendances.show', a.id)}
+                                                editUrl={route('attendances.edit', a.id)}
+                                                deleteUrl={route('attendances.destroy', a.id)}
+                                                showView={true}
+                                                showEdit={isAdmin}
+                                                showDelete={isAdmin}
+                                            />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
