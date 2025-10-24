@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 
-export default function SchedulesEdit({ schedule, users }: { schedule: any; users: any[] }) {
+export default function SchedulesEdit({ schedule, roles }: { schedule: any; roles: any[] }) {
     return (
         <AppLayout>
             <Head title="Edit Schedule" />
@@ -10,9 +10,9 @@ export default function SchedulesEdit({ schedule, users }: { schedule: any; user
                 <form method="post" action={route('schedules.update', schedule.id)}>
                     <input type="hidden" name="_method" value="put" />
                     <div className="grid gap-2">
-                        <select name="user_id" defaultValue={schedule.user_id} className="input">
-                            {users.map((u: any) => (
-                                <option key={u.id} value={u.id}>{u.name}</option>
+                        <select name="role_id" defaultValue={schedule.role_id} className="input">
+                            {roles.map((r: any) => (
+                                <option key={r.id} value={r.id}>{r.label ?? r.name}</option>
                             ))}
                         </select>
                         <input name="shift_name" defaultValue={schedule.shift_name} className="input" />

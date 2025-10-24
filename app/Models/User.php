@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role_id',
     ];
 
     /**
@@ -53,7 +53,7 @@ class User extends Authenticatable
      */
     public function hasRole(string $role): bool
     {
-        return isset($this->role) && $this->role === $role;
+        return $this->role?->name === $role;
     }
 
     public function isAdmin(): bool
@@ -74,5 +74,10 @@ class User extends Authenticatable
     public function isEmployee(): bool
     {
         return $this->hasRole('employee');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

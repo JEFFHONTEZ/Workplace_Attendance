@@ -10,8 +10,10 @@ class UserPolicyTest extends TestCase
 {
     public function test_hr_cannot_update_admin()
     {
-        $hr = new User(['role' => 'hr']);
-        $admin = new User(['role' => 'admin']);
+    $hr = new User();
+    $hr->setRelation('role', new \App\Models\Role(['name' => 'hr']));
+    $admin = new User();
+    $admin->setRelation('role', new \App\Models\Role(['name' => 'admin']));
 
         $policy = new UserPolicy();
 
@@ -20,8 +22,10 @@ class UserPolicyTest extends TestCase
 
     public function test_admin_can_update_hr()
     {
-        $admin = new User(['role' => 'admin']);
-        $hr = new User(['role' => 'hr']);
+    $admin = new User();
+    $admin->setRelation('role', new \App\Models\Role(['name' => 'admin']));
+    $hr = new User();
+    $hr->setRelation('role', new \App\Models\Role(['name' => 'hr']));
 
         $policy = new UserPolicy();
 

@@ -15,7 +15,8 @@ class DashboardController extends Controller
         $user = $request->user();
 
         // Provide common stats
-        $totalEmployees = User::where('role', 'employee')->count();
+    $employeeRole = \App\Models\Role::where('name', 'employee')->first();
+    $totalEmployees = $employeeRole ? User::where('role_id', $employeeRole->id)->count() : 0;
         $presentToday = Attendance::whereDate('created_at', now()->toDateString())->whereNotNull('check_in_time')->count();
         $lateArrivals = Attendance::whereDate('created_at', now()->toDateString())->whereNotNull('check_in_time')
             ->whereTime('check_in_time', '>', '09:00:00')
@@ -36,8 +37,8 @@ class DashboardController extends Controller
         }
 
         // Department distribution (we'll approximate by role for now)
-        $departments = User::select('role', \DB::raw('count(*) as total'))->groupBy('role')->get()->map(function ($r) {
-            return ['name' => $r->role, 'count' => $r->total];
+        $departments = \App\Models\Role::withCount('users')->get()->map(function ($r) {
+            return ['name' => $r->label ?? $r->name, 'count' => $r->users_count];
         })->values();
 
         // Gateperson data: currently signed in
@@ -61,7 +62,7 @@ class DashboardController extends Controller
 
         // Render role-aware dashboard component
         return Inertia::render('dashboard', [
-            'role' => $user?->role ?? 'employee',
+            'role' => $user?->role?->name ?? 'employee',
             'stats' => [
                 'totalEmployees' => $totalEmployees,
                 'presentToday' => $presentToday,
@@ -82,7 +83,8 @@ class DashboardController extends Controller
     public function searchEmployee(Request $request)
     {
         $q = $request->query('q');
-        $results = User::where('role', 'employee')
+        $employeeRole = \App\Models\Role::where('name', 'employee')->first();
+        $results = User::when($employeeRole, fn($b) => $b->where('role_id', $employeeRole->id))
             ->when($q, fn($qB) => $qB->where(function ($sub) use ($q) {
                 $sub->where('name', 'like', "%{$q}%")->orWhere('email', 'like', "%{$q}%")->orWhere('id', $q);
             }))

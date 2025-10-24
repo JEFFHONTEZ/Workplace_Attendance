@@ -9,12 +9,13 @@ class SchedulePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin() || $user->isHR() || $user->id === $user->id;
+        return $user->isAdmin() || $user->isHR();
     }
 
     public function view(User $user, Schedule $schedule): bool
     {
-        return $user->isAdmin() || $user->isHR() || $schedule->user_id === $user->id;
+        // Admin and HR can view any schedule. Otherwise allow if user's role matches the schedule's role.
+        return $user->isAdmin() || $user->isHR() || ($user->role_id !== null && $schedule->role_id === $user->role_id);
     }
 
     public function create(User $user): bool

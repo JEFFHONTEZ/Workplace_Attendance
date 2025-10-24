@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
-export default function UsersCreate() {
-    const form = useForm({ name: '', email: '', password: '', role: 'employee' });
+export default function UsersCreate({ roles }: { roles: any[] }) {
+    const form = useForm({ name: '', email: '', password: '', role_id: roles?.[0]?.id ?? null });
 
     function submit(e: any) {
         e.preventDefault();
@@ -37,11 +37,10 @@ export default function UsersCreate() {
                             {form.errors.password && <div className="text-destructive text-sm">{form.errors.password}</div>}
 
                             <Label>Role</Label>
-                            <select className="input" value={form.data.role} onChange={(e) => form.setData('role', e.target.value)}>
-                                <option value="employee">Employee</option>
-                                <option value="gateperson">Gateperson</option>
-                                <option value="hr">HR</option>
-                                <option value="admin">Admin</option>
+                            <select className="input" value={form.data.role_id} onChange={(e) => form.setData('role_id', e.target.value)}>
+                                {roles.map((r: any) => (
+                                    <option key={r.id} value={r.id}>{r.label ?? r.name}</option>
+                                ))}
                             </select>
 
                             <div className="pt-2">

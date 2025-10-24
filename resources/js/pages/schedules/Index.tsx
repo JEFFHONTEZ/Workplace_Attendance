@@ -27,7 +27,7 @@ export default function SchedulesIndex({ schedules }: { schedules: any }) {
                             {schedules.data.map((s: any) => (
                                 <tr key={s.id} className="border-t">
                                     <td className="p-2">{s.shift_name}</td>
-                                    <td className="p-2">{s.user?.name}</td>
+                                        <td className="p-2">{s.role?.label ?? s.role?.name}</td>
                                     <td className="p-2">{s.start_time}</td>
                                     <td className="p-2">{s.end_time}</td>
                                     <td className="p-2 text-center">

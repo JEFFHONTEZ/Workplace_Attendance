@@ -5,8 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
-export default function UsersEdit({ user }: { user: any }) {
-    const form: any = useForm<Record<string, any>>({ name: user.name, email: user.email, password: '', role: user.role });
+export default function UsersEdit({ user, roles }: { user: any; roles: any[] }) {
+    const form: any = useForm<Record<string, any>>({ name: user.name, email: user.email, password: '', role_id: user.role_id });
 
     function submit(e: any) {
         e.preventDefault();
@@ -35,11 +35,10 @@ export default function UsersEdit({ user }: { user: any }) {
                             <Input type="password" value={form.data.password} onChange={(e) => form.setData('password', e.target.value)} />
 
                             <Label>Role</Label>
-                            <select className="input" value={form.data.role} onChange={(e) => form.setData('role', e.target.value)}>
-                                <option value="employee">Employee</option>
-                                <option value="gateperson">Gateperson</option>
-                                <option value="hr">HR</option>
-                                <option value="admin">Admin</option>
+                            <select className="input" value={form.data.role_id} onChange={(e) => form.setData('role_id', e.target.value)}>
+                                {roles.map((r: any) => (
+                                    <option key={r.id} value={r.id}>{r.label ?? r.name}</option>
+                                ))}
                             </select>
 
                             <div className="pt-2">

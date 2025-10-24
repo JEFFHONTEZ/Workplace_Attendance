@@ -12,8 +12,11 @@ class AttendanceFeatureTest extends TestCase
 
     public function test_gateperson_can_create_attendance()
     {
-        $gate = User::factory()->create(['role' => 'gateperson']);
-        $employee = User::factory()->create(['role' => 'employee']);
+    $gateRole = \App\Models\Role::create(['name' => 'gateperson']);
+    $employeeRole = \App\Models\Role::create(['name' => 'employee']);
+
+    $gate = User::factory()->create(['role_id' => $gateRole->id]);
+    $employee = User::factory()->create(['role_id' => $employeeRole->id]);
 
         $this->actingAs($gate)
             ->post(route('attendances.store'), [
@@ -27,8 +30,9 @@ class AttendanceFeatureTest extends TestCase
 
     public function test_employee_cannot_create_attendance()
     {
-        $employee = User::factory()->create(['role' => 'employee']);
-        $other = User::factory()->create(['role' => 'employee']);
+    $employeeRole = \App\Models\Role::firstOrCreate(['name' => 'employee']);
+    $employee = User::factory()->create(['role_id' => $employeeRole->id]);
+    $other = User::factory()->create(['role_id' => $employeeRole->id]);
 
         $this->actingAs($employee)
             ->post(route('attendances.store'), [

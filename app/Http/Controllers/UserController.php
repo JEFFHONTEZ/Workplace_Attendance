@@ -28,7 +28,11 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        return Inertia::render('users/Create');
+        $roles = \App\Models\Role::orderBy('name')->get();
+
+        return Inertia::render('users/Create', [
+            'roles' => $roles,
+        ]);
     }
 
     public function store(Request $request)
@@ -39,11 +43,11 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'role' => 'required|string|in:admin,hr,gateperson,employee',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
-    $data['password'] = bcrypt($data['password']);
-    $user = User::create($data);
+        $data['password'] = bcrypt($data['password']);
+        $user = User::create($data);
 
         return redirect()->route('users.index');
     }
@@ -52,8 +56,11 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
+        $roles = \App\Models\Role::orderBy('name')->get();
+
         return Inertia::render('users/Edit', [
             'user' => $user,
+            'roles' => $roles,
         ]);
     }
 
@@ -64,7 +71,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|string|in:admin,hr,gateperson,employee',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
         if ($request->filled('password')) {

@@ -18,7 +18,8 @@ class ReportController extends Controller
             abort(403);
         }
         $totalUsers = \App\Models\User::count();
-        $totalEmployees = \App\Models\User::where('role', 'employee')->count();
+    $employeeRole = \App\Models\Role::where('name', 'employee')->first();
+    $totalEmployees = $employeeRole ? \App\Models\User::where('role_id', $employeeRole->id)->count() : 0;
         $attendanceToday = Attendance::whereDate('created_at', now()->toDateString())->count();
         $schedulesCount = Schedule::count();
 

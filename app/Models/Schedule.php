@@ -10,7 +10,7 @@ class Schedule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'role_id',
         'shift_name',
         'start_time',
         'end_time',
@@ -24,5 +24,10 @@ class Schedule extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

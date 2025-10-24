@@ -14,9 +14,12 @@ class ReportControllerTest extends TestCase
 
     public function test_chart_api_returns_counts_for_date_range()
     {
-        // seed users
-        $admin = User::factory()->create(['role' => 'admin']);
-        $employee = User::factory()->create(['role' => 'employee']);
+    // seed roles and users
+    $adminRole = \App\Models\Role::create(['name' => 'admin']);
+    $employeeRole = \App\Models\Role::create(['name' => 'employee']);
+
+    $admin = User::factory()->create(['role_id' => $adminRole->id]);
+    $employee = User::factory()->create(['role_id' => $employeeRole->id]);
 
         // create attendances: one today, one 2 days ago
         Attendance::create([

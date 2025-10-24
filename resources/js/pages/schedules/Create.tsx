@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 
-export default function SchedulesCreate({ users }: { users: any[] }) {
+export default function SchedulesCreate({ roles }: { roles: any[] }) {
     return (
         <AppLayout>
             <Head title="Create Schedule" />
@@ -9,9 +9,9 @@ export default function SchedulesCreate({ users }: { users: any[] }) {
                 <h2 className="text-lg font-medium mb-4">Create Schedule</h2>
                 <form method="post" action={route('schedules.store')}>
                     <div className="grid gap-2">
-                        <select name="user_id" className="input">
-                            {users.map((u: any) => (
-                                <option key={u.id} value={u.id}>{u.name}</option>
+                        <select name="role_id" className="input">
+                            {roles.map((r: any) => (
+                                <option key={r.id} value={r.id}>{r.label ?? r.name}</option>
                             ))}
                         </select>
                         <input name="shift_name" placeholder="Shift name" className="input" />

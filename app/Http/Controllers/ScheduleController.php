@@ -17,7 +17,7 @@ class ScheduleController extends Controller
     {
         $this->authorize('viewAny', Schedule::class);
 
-        $schedules = Schedule::with('user')->orderBy('start_time')->paginate(20);
+    $schedules = Schedule::with('role')->orderBy('start_time')->paginate(20);
 
         return Inertia::render('schedules/Index', [
             'schedules' => $schedules,
@@ -28,10 +28,10 @@ class ScheduleController extends Controller
     {
         $this->authorize('create', Schedule::class);
 
-        $users = \App\Models\User::where('role', 'employee')->orderBy('name')->get();
+        $roles = \App\Models\Role::orderBy('name')->get();
 
         return Inertia::render('schedules/Create', [
-            'users' => $users,
+            'roles' => $roles,
         ]);
     }
 
@@ -40,7 +40,7 @@ class ScheduleController extends Controller
         $this->authorize('create', Schedule::class);
 
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'role_id' => 'required|exists:roles,id',
             'shift_name' => 'required|string|max:255',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -56,7 +56,7 @@ class ScheduleController extends Controller
         $this->authorize('view', $schedule);
 
         return Inertia::render('schedules/Show', [
-            'schedule' => $schedule->load('user'),
+            'schedule' => $schedule->load('role'),
         ]);
     }
 
@@ -64,11 +64,11 @@ class ScheduleController extends Controller
     {
         $this->authorize('update', $schedule);
 
-        $users = \App\Models\User::where('role', 'employee')->orderBy('name')->get();
+        $roles = \App\Models\Role::orderBy('name')->get();
 
         return Inertia::render('schedules/Edit', [
             'schedule' => $schedule,
-            'users' => $users,
+            'roles' => $roles,
         ]);
     }
 
@@ -77,7 +77,7 @@ class ScheduleController extends Controller
         $this->authorize('update', $schedule);
 
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'role_id' => 'required|exists:roles,id',
             'shift_name' => 'required|string|max:255',
             'start_time' => 'required',
             'end_time' => 'required',

@@ -12,14 +12,16 @@ class UserManagementTest extends TestCase
 
     public function test_admin_can_create_user()
     {
-        $admin = User::factory()->create(['role' => 'admin']);
+        $adminRole = \App\Models\Role::create(['name' => 'admin']);
+        $employeeRole = \App\Models\Role::create(['name' => 'employee']);
+        $admin = User::factory()->create(['role_id' => $adminRole->id]);
 
         $this->actingAs($admin)
             ->post(route('users.store'), [
                 'name' => 'New Employee',
                 'email' => 'new@example.com',
                 'password' => 'password',
-                'role' => 'employee',
+                'role_id' => $employeeRole->id,
             ])
             ->assertRedirect(route('users.index'));
 
