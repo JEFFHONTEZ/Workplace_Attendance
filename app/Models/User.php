@@ -53,7 +53,25 @@ class User extends Authenticatable
      */
     public function hasRole(string $role): bool
     {
-        return $this->role?->name === $role;
+        // Support both the new Role relation and the legacy string `role` attribute.
+        // If the relation is loaded or set as a Role model instance, compare its name.
+        if ($this->role instanceof \App\Models\Role) {
+            return $this->role->name === $role;
+        }
+
+        // If the legacy `role` string column is still present or populated, compare that.
+        $attrRole = $this->getAttribute('role');
+        if (is_string($attrRole) && $attrRole !== '') {
+            return $attrRole === $role;
+        }
+
+        // As a fallback, if role_id is present, attempt to lazy-load the Role and compare.
+        if ($this->role_id) {
+            $r = $this->role()->getResults();
+            return $r?->name === $role;
+        }
+
+        return false;
     }
 
     public function isAdmin(): bool

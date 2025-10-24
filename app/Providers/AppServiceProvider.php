@@ -30,13 +30,25 @@ class AppServiceProvider extends ServiceProvider
                         return ['user' => null];
                     }
 
+                    // Provide role information whether it's stored as a relation or legacy string.
+                    $roleName = null;
+                    $roleLabel = null;
+
+                    if ($user->role instanceof \App\Models\Role) {
+                        $roleName = $user->role->name;
+                        $roleLabel = $user->role->label ?? $user->role->name;
+                    } else {
+                        $roleName = is_string($user->getAttribute('role')) ? $user->getAttribute('role') : ($user->role_id ? optional($user->role()->getResults())->name : null);
+                        $roleLabel = $roleName;
+                    }
+
                     return [
                         'user' => [
                             'id' => $user->id,
                             'name' => $user->name,
                             'email' => $user->email,
-                            'role' => $user->role?->name ?? 'employee',
-                            'role_label' => $user->role?->label ?? $user->role?->name ?? 'employee',
+                            'role' => $roleName ?? 'employee',
+                            'role_label' => $roleLabel ?? ($roleName ?? 'employee'),
                             'created_at' => $user->created_at?->toDateTimeString(),
                             'updated_at' => $user->updated_at?->toDateTimeString(),
                         ],
